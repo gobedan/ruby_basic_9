@@ -1,13 +1,20 @@
 require_relative './instance_counter.rb'
 require_relative './instance_list.rb'
 require_relative './company_info.rb'
+require_relative './accessors.rb'
+require_relative './station.rb'
 
 class Train
   include CompanyInfo
   include InstanceList
   include InstanceCounter
+  include Validation
+
+  VALID_ID = /^ \w{3} (|-\w{2}) $/x.freeze
 
   attr_reader :id, :route, :carriages
+
+  validate :id, :format, VALID_ID
 
   def initialize(id)
     @id = id
@@ -15,13 +22,6 @@ class Train
     @carriages = []
     self.class.register_instance
     register_instance_in_list
-  end
-
-  def valid?
-    validate!
-    true
-  rescue RuntimeError
-    false
   end
 
   def self.find(id)
@@ -78,17 +78,7 @@ class Train
 
   protected
 
-  VALID_ID = /^ \w{3} (|-\w{2}) $/x.freeze
-
   attr_accessor :current_station_index
-
-  def validate!
-    validate_train_id!
-  end
-
-  def validate_train_id!
-    raise 'invalid train id!' unless id =~ VALID_ID
-  end
 
   def go(station)
     return unless station

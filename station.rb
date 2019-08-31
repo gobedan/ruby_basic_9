@@ -4,8 +4,10 @@ require_relative './instance_counter.rb'
 class Station
   include InstanceList
   include InstanceCounter
+  extend Accessors
 
-  attr_reader :trains, :name
+  attr_reader :trains
+  attr_accessor_with_history :name
 
   def initialize(name)
     @name = name

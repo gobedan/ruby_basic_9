@@ -8,12 +8,11 @@ class Route
   include Validation
   extend Accessors
 
-  attr_accessor_with_history :route_list 
+  attr_reader :route_list 
 
   validate :first_station, :type, Station
-  validate :last_last, :type, Station
+  validate :last_station, :type, Station
 
-  puts @validations[0][:arg].class
   def initialize(first, last)
     @first_station = first 
     @last_station = last 

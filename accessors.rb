@@ -6,7 +6,10 @@ module Accessors
       end
       define_method("#{name}=") do |value|
         old_value = instance_variable_get("@#{name}")
-        if instance_variable_get("@#{name}")
+        if instance_variable_get("@#{name}_history")
+          send("#{name}_history").push(old_value)
+        elsif old_value
+          instance_variable_set("@#{name}_history", [])
           send("#{name}_history").push(old_value)
         else
           instance_variable_set("@#{name}_history", [])

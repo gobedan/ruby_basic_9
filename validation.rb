@@ -7,7 +7,7 @@ module Validation
   module ClassMethods
     attr_reader :validations 
 
-    def validate(var, type, *arg)
+    def validate(var, type, arg)
       @validations ||= []
       @validations.push({:var => var, :type => type, :arg => arg})
     end
@@ -34,7 +34,7 @@ module Validation
     end
 
     def type(var, type)
-      raise "Wrong type of variable! #{var} must be #{type}" unless var.class.is_a? type 
+      raise "Wrong type of variable! #{var} must be #{type}" unless var.is_a? type 
     end
 
     def format(var, pattern)

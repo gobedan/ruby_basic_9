@@ -7,16 +7,16 @@ module Validation
   module ClassMethods
     attr_reader :validations 
 
-    def validate(var, type:, arg: '')
+    def validate(var, type, *arg)
       @validations ||= []
-      @validations.push({var => var, type => type, arg => arg})
+      @validations.push({:var => var, :type => type, :arg => arg})
     end
   end
 
   module InstanceMethods
     def validate! 
-      self.class.validations.each do |validaiton|
-        send(validation[type], instance_variable_get("@{validation[var]}"), validation[arg])  
+      self.class.validations.each do |validation|
+        send(validation[:type], instance_variable_get("@#{validation[:var]}"), validation[:arg])  
       end
     end
 
@@ -34,7 +34,7 @@ module Validation
     end
 
     def type(var, type)
-      raise "Wrong type of variable! #{var} must be #{type}" unless var.is_a? type 
+      raise "Wrong type of variable! #{var} must be #{type}" unless var.class.is_a? type 
     end
 
     def format(var, pattern)
